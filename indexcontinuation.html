@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Time</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #ffeef8;
+            background-image: url('https://i.pinimg.com/736x/0d/bf/8d/0dbf8ddd970488e81f6eab26a9c467ed.jpg');
+            background-repeat: repeat;
+            color: #333;
+            line-height: 1.6;
+            text-align: center;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #fe7ebe;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff5f7;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-container {
+            margin-top: 20px;
+        }
+
+        .quiz-question {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .answer-button {
+            display: block;
+            padding: 15px;
+            margin: 10px auto;
+            width: 50%;
+            background-color: #fe7ebe;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .answer-button:hover {
+            background-color: #f46bb0;
+        }
+
+        .result {
+            font-size: 50px;
+            margin-top: 20px;
+            color: #fe7ebe;
+        }
+
+        .submit-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #fe7ebe;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #f46bb0;
+        }
+
+        .gif-container {
+            display: none;
+            margin-top: 20px;
+            min-height: 50px;
+            overflow: hidden;
+        }
+
+        #feedback-message {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000000;
+            text-align: center;
+        }
+
+        /* Style for the button to proceed to the next website */
+        #next-website-button,
+        #retake-button {
+            display: none;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        #next-website-button:hover,
+        #retake-button:hover {
+            background-color: #f46bb0;
+        }
+
+        #retake-button {
+            background-color: #940065;
+        }
+
+        #retake-button:hover {
+            background-color: #e7dae6;
+        }
+
+        #low-score-message {
+            font-size: 24px;
+            font-weight: bold;
+            color: rgb(249, 100, 232);
+            display: none;
+        }
+
+        #next-button {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            display: none;
+            background-color: #fe7ebe;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 30px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #next-button:hover {
+            background-color: #f46bb0;
+        }
+
+        /* Center the "Next Question" button */
+        .center-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>QUIZ TIME</h1>
+    </header>
+
+    <div class="container">
+        <div class="quiz-container">
+            <h2>Quiz Questions</h2>
+            <div id="quiz" class="quiz-question"></div>
+            <div id="answer-buttons" class="answer-buttons"></div>
+            <div class="result" id="result" style="display: none;"></div>
+            <div class="gif-container" id="gif-container">
+                <p id="feedback-message"></p>
+            </div>
+            <div class="center-button">
+                <button id="next-button" class="submit-button" style="display: none;">Next Question</button>
+            </div>
+            <!-- Button for redirecting to the next website -->
+            <button id="next-website-button" onclick="goToNextWebsite()">CLICK MEEE</button>
+            <!-- Button to retake the quiz -->
+            <button id="retake-button" onclick="retakeQuiz()">Retake nga 🙄</button>
+            <!-- Message for low score -->
+            <p id="low-score-message">haha proven and tested na....di ako mahal😔</p>
+        </div>
+    </div>
+
+    <script>
+        const quizQuestions = [
+            {
+                question: "What's my favorite pizza flavor?",
+                answers: [
+                    { text: "Hawaiian pizza", correct: false },
+                    { text: "Spinach pizza", correct: true },
+                    { text: "Meat pizza", correct: false },
+                    { text: "Pepperoni pizza", correct: false }
+                ],
+                feedback: "nux naalala 🥰 🍕",
+                wrongFeedback: "Ay 🙄 tsk"
+            },
+            {
+                question: "What's my favorite number?",
+                answers: [
+                    { text: "12", correct: true },
+                    { text: "17", correct: false },
+                    { text: "10", correct: false },
+                    { text: "26", correct: false }
+                ],
+                feedback: "WOW 🥹 🎉",
+                wrongFeedback: "GRABE 😢"
+            },
+            {
+                question: "What's the name of our cat?",
+                answers: [
+                    { text: "Zoro", correct: false },
+                    { text: "Creamy", correct: true },
+                    { text: "Magumi", correct: false },
+                    { text: "Sky", correct: false }
+                ],
+                feedback: "ang pusa nating inayawan mu 😿",
+                wrongFeedback: "OK...GANYAN TALAGA PAG DI AKO MAHAL"
+            },
+            {
+                question: "What year was I born?",
+                answers: [
+                    { text: "2005", correct: false },
+                    { text: "2004", correct: false },
+                    { text: "2006", correct: true },
+                    { text: "2007", correct: false },
+                ],
+                feedback: "kala ko di mo alam eh🙄 🎂",
+                wrongFeedback: "haha kinalimutan year ko haha"
+            },
+            {
+                question: "What's my sport?",
+                answers: [
+                    { text: "Basketball", correct: false },
+                    { text: "Badminton", correct: true },
+                    { text: "Volleyball", correct: false },
+                    { text: "Table tennis", correct: false }
+                ],
+                feedback: "yes yes yow 🏸",
+                wrongFeedback: "🙂👍"
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            showQuestion(quizQuestions[currentQuestionIndex]);
+        }
+
+        function showQuestion(question) {
+            const questionContainer = document.getElementById('quiz');
+            const answerButtonsContainer = document.getElementById('answer-buttons');
+            const gifContainer = document.getElementById('gif-container');
+            const feedbackMessage = document.getElementById('feedback-message');
+
+            questionContainer.innerText = question.question;
+            answerButtonsContainer.innerHTML = '';
+            gifContainer.style.display = 'none';
+
+            question.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.innerText = answer.text;
+                button.classList.add('answer-button');
+                button.addEventListener('click', () => selectAnswer(answer, question));
+                answerButtonsContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(answer, question) {
+            const resultContainer = document.getElementById('result');
+            const nextButton = document.getElementById('next-button');
+            const gifContainer = document.getElementById('gif-container');
+            const feedbackMessage = document.getElementById('feedback-message');
+
+            const buttons = document.querySelectorAll('.answer-button');
+            buttons.forEach(button => {
+                button.disabled = true;
+            });
+
+            if (answer.correct) {
+                resultContainer.innerText = 'Correct!';
+                feedbackMessage.innerText = question.feedback;
+                gifContainer.style.display = 'block';
+                score++;
+            } else {
+                resultContainer.innerText = 'Wrong!';
+                feedbackMessage.innerText = question.wrongFeedback;
+                gifContainer.style.display = 'block';
+            }
+
+            resultContainer.style.display = 'block';
+            nextButton.style.display = 'block';
+        }
+
+        document.getElementById('next-button').addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                showQuestion(quizQuestions[currentQuestionIndex]);
+                document.getElementById('result').style.display = 'none';
+                document.getElementById('next-button').style.display = 'none';
+            } else {
+                const quizContainer = document.getElementById('quiz');
+                const answerButtonsContainer = document.getElementById('answer-buttons');
+                const resultContainer = document.getElementById('result');
+                const nextWebsiteButton = document.getElementById('next-website-button');
+                const retakeButton = document.getElementById('retake-button');
+                const lowScoreMessage = document.getElementById('low-score-message');
+
+                quizContainer.innerText = `Quiz finished! Your score: ${score}/${quizQuestions.length}`;
+                answerButtonsContainer.innerHTML = '';
+                resultContainer.style.display = 'none';
+                document.getElementById('next-button').style.display = 'none';
+
+                // Show the next website button if the score is 4 or higher
+                if (score >= 4) {
+                    nextWebsiteButton.style.display = 'block';
+                } else { 
+                    // Show feedback and retake quiz button if score is 3 or below
+                    retakeButton.style.display = 'block';
+                    lowScoreMessage.style.display = 'block';
+                }   
+            }
+        });
+
+        function goToNextWebsite() {
+            window.location.href = "https://example.com"; // Replace with your desired URL
+        }
+
+        function retakeQuiz() {
+            const nextWebsiteButton = document.getElementById('next-website-button');
+            const retakeButton = document.getElementById('retake-button');
+            const lowScoreMessage = document.getElementById('low-score-message');
+
+            nextWebsiteButton.style.display = 'none';
+            retakeButton.style.display = 'none';
+            lowScoreMessage.style.display = 'none';
+
+            startQuiz(); // Restart the quiz
+        }
+
+        startQuiz();
+    </script>
+</body>
+
+</html>
